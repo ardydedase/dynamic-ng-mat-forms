@@ -1,0 +1,22 @@
+// .example-form {
+//     min-width: 150px;
+//     max-width: 500px;
+//     width: 100%;
+//   }
+  
+//   .example-full-width {
+//     width: 100%;
+//   }
+
+.service-technician-form-fields {
+    display: flex;
+    align-items: flex-start;
+  
+    mat-form-field {
+      margin-left: 5px;
+      width: 300px;
+    }
+    .delete {
+      margin: 5px;
+    }  
+  }

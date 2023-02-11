@@ -1,1 +1,65 @@
-<p>dynamic-form works!</p>
+<!--https://www.tektutorialshub.com/angular/nested-formarray-example-add-form-fields-dynamically/-->
+<form [formGroup]="serviceTechnicianForm" (ngSubmit)="onSubmit()">
+    <div formArrayName="lineItems">
+      <div *ngFor="let lineItem of lineItems.controls; let lineIndex=index">
+        <div class="service-technician-form-fields" [formGroupName]="lineIndex">
+            <!--Technician-->
+            <mat-form-field class="technician" appearance="fill">
+              <mat-label>Technician</mat-label>
+              <input type="text"
+                placeholder="Pick one"
+                aria-label="Technician"
+                matInput
+                [matAutocomplete]="autoTechnicians"
+                formControlName="technician">
+              <mat-autocomplete #autoTechnicians="matAutocomplete" (optionSelected)="updateTechnicianId(lineIndex, $event)">
+                <mat-option *ngFor="let option of filteredTechnicians[lineIndex] | async" [value]="option.employee_name">
+                  {{option.employee_name}}
+                </mat-option>
+              </mat-autocomplete>                         
+            </mat-form-field>
+  
+            <!--Mat chips-->
+            <mat-form-field class="services" appearance="fill">
+                <mat-label>Services</mat-label>
+                <mat-chip-grid #chipGrid aria-label="Select services">
+                  <mat-chip-row *ngFor="let service of selectedServices[lineIndex]" (removed)="removeService(lineIndex, service.id)">
+                    {{service.service_name}} : ${{service.price}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + service.service_name">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                </mat-chip-grid>
+                <input type="text" 
+                  placeholder="Select service..."
+                  matInput
+                  [matChipInputFor]="chipGrid" 
+                  [matAutocomplete]="autoServices"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  formControlName="services">
+                <mat-autocomplete #autoServices="matAutocomplete" (optionSelected)="selectService(lineIndex, $event)">
+                  <mat-option *ngFor="let service of filteredServices[lineIndex] | async" [value]="service.service_name">
+                    {{service.service_name}} : ${{service.price}}
+                  </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+              
+            <!--Remove-->
+            <button class="delete" *ngIf="lineIndex > 0" (click)="removeLineItem(lineIndex)" mat-mini-fab color="warn" aria-label="Example icon button with a plus one icon">
+              <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div>
+      <button (click)="addLineItem()" mat-mini-fab color="secondary" aria-label="Example icon button with a plus one icon">
+          <mat-icon>add</mat-icon>
+      </button>
+  </div>
+  {{serviceTechnicianForm.value | json}}
+  <br/>
+  {{selectedServices | json}}
+  <br/>
+  {{lineItemParams | json}}
+  
