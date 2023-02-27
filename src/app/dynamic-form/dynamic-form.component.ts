@@ -57,11 +57,6 @@ export class DynamicFormComponent implements OnInit {
   ];
   filteredTechnicians: (Observable<Technician[]> | undefined)[] = [];
 
-  //TODO: Remove after testing
-  filteredFruits: (Observable<string[]>)[] = [];
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-
   @ViewChild('fruitInput') fruitInput!: ElementRef<HTMLInputElement>;
 
   constructor(private formBuilder: FormBuilder) { 
@@ -154,7 +149,6 @@ export class DynamicFormComponent implements OnInit {
       startWith(''),
       map(value => this.filterTechnicians(value || '')),
     );
-
   }
 
   initServiceItemForm(index: number): void {
