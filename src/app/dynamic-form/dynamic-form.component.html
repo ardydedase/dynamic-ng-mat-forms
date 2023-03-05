@@ -51,15 +51,18 @@
         </div>
       </div>
     </div>
-  </form>
-  <div>
+    <div>
       <button (click)="addLineItem()" mat-mini-fab color="secondary" aria-label="Example icon button with a plus one icon">
           <mat-icon>add</mat-icon>
       </button>
-  </div>
+      <br/><br/>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!serviceTechnicianForm.valid">Submit</button>      
+    </div>
+  </form>
+  <br/><br/>
   {{serviceTechnicianForm.value | json}}
   <br/>
   {{selectedServices | json}}
   <br/>
-  {{lineItemParams | json}}
+  {{lineItemParamsList | json}}
   

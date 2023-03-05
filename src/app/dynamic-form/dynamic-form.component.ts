@@ -47,7 +47,7 @@ export class DynamicFormComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 
-  lineItemParams: LineItemParams[] = [];
+  lineItemParamsList: LineItemParams[] = [];
   lineItemsFormArray: FormArray;
   options: Technician[] = [
     {employee_name: 'John', id: '1'},
@@ -69,7 +69,7 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit(): void { 
     this.lineItems.push(this.formBuilder.group(this.defaultLineItem));
-    this.lineItemParams.push({
+    this.lineItemParamsList.push({
       technicianId: '',
       serviceIds: [],
       additionalPrice: 0,
@@ -96,22 +96,13 @@ export class DynamicFormComponent implements OnInit {
     this.destroyed$.unsubscribe();
   }  
 
-  // construct the form array
-  constructLineItemParams(lineIndex: number): void {
-    this.lineItemParams[lineIndex] = {
-      technicianId: this.technicians[lineIndex]?.id || '',
-      serviceIds: this.selectedServices[lineIndex]?.map(service => service.id) || [],
-      additionalPrice: 0, // TODO: add this to the form
-    };
-  }
-
   updateServiceIds(lineIndex: number): void {
-    this.lineItemParams[lineIndex].serviceIds = this.selectedServices[lineIndex]?.map(service => service.id) || [];
+    this.lineItemParamsList[lineIndex].serviceIds = this.selectedServices[lineIndex]?.map(service => service.id) || [];
   }
 
   updateTechnicianId(lineIndex: number, event: MatAutocompleteSelectedEvent): void {
     const technician = this.technicians.find(technician => technician.employee_name === event.option.value);
-    this.lineItemParams[lineIndex].technicianId = technician?.id || '';
+    this.lineItemParamsList[lineIndex].technicianId = technician?.id || '';
   }
 
   selectService(lineIndex: number, event: MatAutocompleteSelectedEvent): void {
@@ -155,6 +146,7 @@ export class DynamicFormComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.serviceTechnicianForm.value);
+    console.log('lineItemParams:', this.lineItemParamsList);
   }  
 
   get lineItems(): FormArray {
@@ -166,7 +158,7 @@ export class DynamicFormComponent implements OnInit {
     const index = this.lineItems.length - 1;
     this.initTechnicianForm(index);
     this.initServiceItemForm(index);
-    this.lineItemParams[index] = {
+    this.lineItemParamsList[index] = {
       technicianId: '',
       serviceIds: [],
       additionalPrice: 0,
