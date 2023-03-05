@@ -110,15 +110,12 @@ export class DynamicFormComponent implements OnInit {
   }
 
   updateTechnicianId(lineIndex: number, event: MatAutocompleteSelectedEvent): void {
-    console.log("change technician: ", event.option.value);
     const technician = this.technicians.find(technician => technician.employee_name === event.option.value);
     this.lineItemParams[lineIndex].technicianId = technician?.id || '';
   }
 
   selectService(lineIndex: number, event: MatAutocompleteSelectedEvent): void {
-    console.log("selected typed:", event.option.value);
     const selectedService = this.services.find(service => service.service_name === event.option.value);
-    console.log("selectedService: ", selectedService);
     if (this.selectedServices[lineIndex] ===   undefined) {
       this.selectedServices[lineIndex] = [];
     }
@@ -127,7 +124,6 @@ export class DynamicFormComponent implements OnInit {
       const arrayControl = this.serviceTechnicianForm.get("lineItems") as FormArray;
       arrayControl.at(lineIndex).get("services")?.setValue(null);
     }
-    console.log("selectedServices: ", this.selectedServices);
     this.updateServiceIds(lineIndex);
   }
 
@@ -142,9 +138,6 @@ export class DynamicFormComponent implements OnInit {
   initTechnicianForm(index: number): void {
     const arrayControl = this.serviceTechnicianForm.get("lineItems") as FormArray;
 
-    console.log(arrayControl);
-    console.log("technician:", arrayControl.at(index).get("technician")); 
-
     this.filteredTechnicians[index] = arrayControl.at(index).get("technician")?.valueChanges.pipe(
       startWith(''),
       map(value => this.filterTechnicians(value || '')),
@@ -153,7 +146,6 @@ export class DynamicFormComponent implements OnInit {
 
   initServiceItemForm(index: number): void {
     const arrayControl = this.serviceTechnicianForm.get("lineItems") as FormArray;
-    console.log("service:", arrayControl.at(index).get("services")); 
 
     this.filteredServices[index] = arrayControl.at(index).get("services")?.valueChanges.pipe(
       startWith(''),
@@ -170,10 +162,8 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public addLineItem(): void {
-    console.log("addLineItem");
     this.lineItems.push(this.newLineItem());
     const index = this.lineItems.length - 1;
-    console.log("add index:", index);
     this.initTechnicianForm(index);
     this.initServiceItemForm(index);
     this.lineItemParams[index] = {
@@ -188,16 +178,12 @@ export class DynamicFormComponent implements OnInit {
   }
 
   private filterTechnicians(value: string): Technician[] {
-    console.log("_filterTechnicianslter");
-    console.log(value);
     const filterValue = value.toLowerCase();
-
     return this.technicians.filter(option => option.employee_name.toLowerCase().includes(filterValue));
   }
 
   private filterServices(service: string): Service[] {
     const filterValue = service.toLowerCase();
-    console.log("filterValue:", filterValue);
     return this.services.filter(service => service.service_name.toLowerCase().includes(filterValue));
   }  
 
